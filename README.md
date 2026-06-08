@@ -1,5 +1,3 @@
-# student-performance-prediction
-Projekt z Programowania 2 dotyczący przewidywania wyników edukacyjnych z wykorzystaniem modeli uczenia maszynowego.
 # Student Performance Prediction
 
 ## Cel projektu
@@ -97,17 +95,6 @@ Największe znaczenie dla przewidywania wyników miały wcześniejsze osiągnię
 
 Wyniki dotyczą wyłącznie analizowanego zbioru danych i nie pozwalają na formułowanie wniosków przyczynowo-skutkowych.
 
-## Technologie
-
-W projekcie wykorzystano:
-
-* Python
-* pandas
-* NumPy
-* matplotlib
-* seaborn
-* scikit-learn
-* Google Colab
 
 ## Zawartość repozytorium
 
