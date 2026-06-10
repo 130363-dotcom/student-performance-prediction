@@ -1,103 +1,85 @@
 # Student Performance Prediction
 
-## Cel projektu
+## Opis projektu
 
-Celem projektu jest przewidywanie wartości `Performance Index` na podstawie wybranych czynników związanych z nauką i codziennym funkcjonowaniem ucznia.
+Celem projektu jest przewidywanie wartości `Performance Index` uczniów na podstawie wybranych cech związanych z nauką i stylem życia. Projekt dotyczy zadania regresji, ponieważ zmienna docelowa ma charakter liczbowy.
 
-Analizowane zmienne obejmują:
+W analizie wykorzystano dataset `Student_Performance.csv`, który zawiera informacje takie jak liczba godzin nauki, wcześniejsze wyniki, długość snu, udział w aktywnościach pozalekcyjnych oraz liczba rozwiązanych arkuszy.
 
-* liczbę godzin nauki,
-* wcześniejsze wyniki,
-* udział w aktywnościach pozalekcyjnych,
-* liczbę godzin snu,
-* liczbę przećwiczonych przykładowych arkuszy.
+## Zmienna docelowa
 
-Jest to zadanie regresji, ponieważ zmienna docelowa `Performance Index` ma charakter liczbowy.
+Zmienną przewidywaną jest:
 
-## Zbiór danych
+- `Performance Index`
 
-W projekcie wykorzystano zbiór danych `Student Performance` pobrany z platformy Kaggle.
+## Wykorzystane cechy
 
-Początkowo zbiór zawierał:
+W modelowaniu wykorzystano następujące zmienne:
 
-* 10 000 obserwacji,
-* 6 kolumn.
+- `Hours Studied`
+- `Previous Scores`
+- `Extracurricular Activities`
+- `Sleep Hours`
+- `Sample Question Papers Practiced`
 
-W trakcie przygotowania danych wykryto i usunięto 127 zduplikowanych wierszy. Po oczyszczeniu zbiór zawierał 9873 obserwacje.
+## Etapy projektu
 
-W danych nie występowały braki wartości.
+Projekt obejmuje:
 
-Zmienna `Extracurricular Activities`, zawierająca początkowo wartości `Yes` i `No`, została zakodowana liczbowo:
+1. Wczytanie danych.
+2. Wstępną eksplorację danych.
+3. Sprawdzenie braków danych.
+4. Usunięcie duplikatów.
+5. Zakodowanie zmiennej tekstowej `Extracurricular Activities`.
+6. Analizę korelacji między zmiennymi.
+7. Wizualizacje danych.
+8. Podział danych na zbiór treningowy i testowy.
+9. Standaryzację danych za pomocą `StandardScaler` w `Pipeline`.
+10. Porównanie modeli za pomocą walidacji krzyżowej na zbiorze treningowym.
+11. Tuning hiperparametrów modelu Random Forest za pomocą `GridSearchCV`.
+12. Końcową ocenę najlepszego modelu na zbiorze testowym.
 
-* `Yes` → `1`,
-* `No` → `0`.
-
-## Analiza danych
-
-W ramach analizy eksploracyjnej wykonano:
-
-* sprawdzenie struktury i typów danych,
-* analizę brakujących wartości,
-* sprawdzenie i usunięcie duplikatów,
-* wizualizację zależności między cechami a `Performance Index`,
-* analizę korelacji,
-* analizę ważności cech.
-
-Najsilniejszą korelację z `Performance Index` miała zmienna `Previous Scores`. Drugą istotną zmienną była liczba godzin nauki, czyli `Hours Studied`.
-
-## Wykorzystane modele
+## Modele
 
 W projekcie porównano trzy modele regresyjne:
 
-1. Linear Regression
-2. Decision Tree Regressor
-3. Random Forest Regressor
+- Linear Regression
+- Decision Tree Regressor
+- Random Forest Regressor
 
-Dodatkowo dla modelu Random Forest zastosowano `GridSearchCV`, aby automatycznie dobrać najlepsze hiperparametry.
+Dodatkowo dla modelu Random Forest przeprowadzono tuning hiperparametrów z użyciem `GridSearchCV`.
 
-## Ocena modeli
+## Metodologia oceny
 
-Modele oceniono za pomocą metryki RMSE. Im niższa wartość RMSE, tym lepsza jakość predykcji.
+Modele zostały porównane za pomocą walidacji krzyżowej na zbiorze treningowym. Zbiór testowy nie był wykorzystywany podczas wyboru modelu. Został użyty dopiero na końcu do ostatecznej oceny najlepszego modelu.
 
-| Model                         |       RMSE |
-| ----------------------------- | ---------: |
-| Linear Regression             | około 2,08 |
-| Random Forest po GridSearchCV | około 2,27 |
-| Random Forest Regressor       | około 2,37 |
-| Decision Tree Regressor       | około 3,03 |
+Takie podejście pozwala uniknąć sytuacji, w której model jest wybierany na podstawie wyników ze zbioru testowego.
 
-Najlepszy wynik uzyskała regresja liniowa.
+## Wyniki
 
-Dla regresji liniowej współczynnik R² wyniósł około 0,988, co oznacza, że model wyjaśnia około 98,8% zróżnicowania wartości `Performance Index`.
+Najlepszym modelem na podstawie wyników walidacji krzyżowej okazała się regresja liniowa.
 
-## Tuning hiperparametrów
+Końcowe wyniki na zbiorze testowym:
 
-Do strojenia modelu Random Forest wykorzystano `GridSearchCV` z pięciokrotną walidacją krzyżową.
+- RMSE: około 2.08
+- R²: około 0.988
 
-Najlepsze znalezione parametry:
-
-```python
-{
-    "max_depth": 10,
-    "min_samples_leaf": 2,
-    "min_samples_split": 5,
-    "n_estimators": 200
-}
-```
-
-Po tuningu RMSE modelu Random Forest poprawiło się z około 2,37 do około 2,27.
+Oznacza to, że przeciętny błąd predykcji modelu wynosi około 2 punkty w skali `Performance Index`, a model wyjaśnia bardzo dużą część zróżnicowania wyników.
 
 ## Wnioski
 
-Najlepszym modelem okazała się regresja liniowa. Sugeruje to, że zależności w analizowanym zbiorze danych są w dużej mierze liniowe.
+Najsilniej związane z wynikiem `Performance Index` okazały się zmienne `Previous Scores` oraz `Hours Studied`. Oznacza to, że wcześniejsze wyniki ucznia oraz liczba godzin nauki mają największe znaczenie dla przewidywania końcowego wyniku.
 
-Największe znaczenie dla przewidywania wyników miały wcześniejsze osiągnięcia oraz liczba godzin nauki. Pozostałe zmienne miały znacznie mniejszy wpływ na predykcje modelu Random Forest.
+Pomimo przeprowadzenia tuningu Random Forest, najlepszy wynik uzyskała regresja liniowa. Może to sugerować, że zależności w danych mają w dużej mierze charakter liniowy.
 
-Wyniki dotyczą wyłącznie analizowanego zbioru danych i nie pozwalają na formułowanie wniosków przyczynowo-skutkowych.
+## Wykorzystane biblioteki
 
+- pandas
+- numpy
+- matplotlib
+- seaborn
+- scikit-learn
 
-## Zawartość repozytorium
+## Autor
 
-* `projekt_student_performance.ipynb` - notebook z analizą i modelami,
-* `Student_Performance.csv` - zbiór danych,
-* `README.md` - opis projektu.
+Projekt wykonany w ramach zajęć z Programowania 2.
